@@ -1,0 +1,26 @@
+# dependencias
+node_modules/
+
+# next
+.next/
+out/
+
+# entorno
+.env
+.env.local
+.env.*.local
+
+# subidas locales (el logo se guarda aquí)
+public/uploads/*
+!public/uploads/.gitkeep
+
+# sistema / editor
+.DS_Store
+*.log
+.vscode/
+.idea/
+
+# builds
+dist/
+coverage/
+*.tsbuildinfo
