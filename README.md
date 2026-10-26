@@ -1,10 +1,10 @@
-# Sistema de gestión para iglesias
+# Ecclesia
 
-Aplicación web para administrar miembros, asistencia, eventos, ministerios, donaciones, anuncios y reportes de una iglesia. Proyecto escolar de la materia de aplicaciones web.
+Sistema de gestión para iglesias: miembros, asistencia, eventos, ministerios, donaciones, anuncios, dashboard y reportes. Proyecto escolar de la materia de aplicaciones web.
 
 ## Documentos del proyecto
 
-- `AGENTS.md` — stack, convenciones y reglas de trabajo (leer primero)
+- `AGENTS.md` — stack, patrón de módulos, convenciones y reglas de trabajo (**leer primero**)
 - `BACKLOG.md` — tareas, reparto y estado
 - `prisma/schema.prisma` — modelo de datos
 - `src/lib/permissions.ts` — matriz de roles y permisos
@@ -12,27 +12,37 @@ Aplicación web para administrar miembros, asistencia, eventos, ministerios, don
 ## Requisitos
 
 - Node.js 20 o superior
-- PostgreSQL (local, Docker, Neon o Supabase)
+- PostgreSQL (local, Docker, o gratis en Neon / Supabase)
 
 ## Puesta en marcha
 
 ```bash
-# 1. Variables de entorno
-cp .env.example .env     # completar DATABASE_URL y AUTH_SECRET
-
-# 2. Dependencias (Prisma fijado en 6, ver AGENTS.md)
+# 1. Dependencias (también genera el cliente de Prisma)
 npm install
-npm i prisma@6 @prisma/client@6
+
+# 2. Variables de entorno
+cp .env.example .env        # en Windows PowerShell: Copy-Item .env.example .env
+#    completar DATABASE_URL y AUTH_SECRET (el comando para generarlo está en .env.example)
 
 # 3. Base de datos
-npx prisma migrate dev
-npx prisma db seed       # cuando exista el seed
+npx prisma migrate dev      # crea las tablas (la primera vez pide un nombre: "init")
+npx prisma db seed          # carga usuarios y datos de demostración
 
 # 4. Desarrollo
-npm run dev
+npm run dev                 # http://localhost:3000
 ```
 
-Antes de que exista el scaffolding de Next.js, la persona que lo cree (ver `BACKLOG.md`, Fase 0) debe correr `create-next-app` dentro de este repositorio conservando los archivos existentes.
+## Usuarios de demostración
+
+| Correo | Rol |
+|---|---|
+| admin@ecclesia.test | Administrador |
+| pastor@ecclesia.test | Pastor |
+| secretario@ecclesia.test | Secretario |
+| tesorero@ecclesia.test | Tesorero |
+| coordinador@ecclesia.test | Coordinador |
+
+Contraseña: el valor de `SEED_PASSWORD` en tu `.env` (por defecto `Ecclesia2026!`).
 
 ## Roles
 

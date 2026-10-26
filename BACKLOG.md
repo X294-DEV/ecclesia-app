@@ -1,33 +1,35 @@
 # BACKLOG — Entrega 3 nov 2026
 
-Estado: `[ ]` pendiente · `[~]` en curso · `[x]` listo
-Reparto sugerido entre 4 personas (ajústenlo): **A**, **B**, **C**, **D**. Cada quien toma módulos completos (BD + API + pantalla).
+Estado: `[ ]` pendiente · `[~]` en curso / escrito y por probar · `[x]` listo
+Reparto entre 4 personas: **A**, **B**, **C**, **D**. Cada quien toma módulos completos (BD + server actions + pantalla).
+**Cómo empezar un módulo:** copiar el patrón de `src/app/(app)/usuarios/page.tsx` y `src/server/users.ts` (ver `AGENTS.md`). Cada módulo ya tiene una página placeholder: se reemplaza.
 
-## Fase 0 — Base (dom 25 – mar 27) — todos dependen de esto
+## Fase 0 — Base (A) — escrita, falta probarla en cada máquina
 
-- [ ] **A** Scaffolding Next.js + Tailwind + shadcn/ui, conexión a Postgres, primera migración
-- [ ] **A** Auth.js con credenciales, roles en sesión, middleware de rutas
-- [ ] **A** `permissions.ts` integrado + layout con menú según rol
-- [ ] **B** Componente genérico de tabla + formulario CRUD reutilizable
-- [ ] **A** RF-01 completo: registrar usuarios, login/logout, recuperar contraseña, restringir por rol
-- [ ] **C** Seed con un usuario por rol y datos de demo
+- [~] **A** Scaffolding Next.js 16 + Tailwind, conexión a Postgres, primera migración
+- [~] **A** Auth.js con credenciales, roles en sesión, `proxy.ts`, `requireCan()`
+- [~] **A** `permissions.ts` integrado + layout con menú según rol
+- [~] **A** Componentes genéricos: `DataTable`, `ActionForm`, `PageHeader`
+- [~] **A** RF-01 completo: registrar usuarios, activar/desactivar, login/logout, recuperar contraseña, restringir por rol
+- [~] **A** Seed con un usuario por rol y datos de demo
 
 ## Fase 1 — Módulos (mié 28 – sáb 31)
 
-- [ ] **C** RF-10 Configuración de la iglesia (nombre, logo, dirección, contacto, horarios)
-- [ ] **B** RF-02 Miembros (alta, edición, búsqueda por nombre, filtro activos/inactivos, baja lógica)
-- [ ] **D** RF-05 Ministerios (CRUD, coordinador, vincular miembros)
-- [ ] **D** RF-04 Eventos (CRUD, responsable, cancelar, calendario)
-- [ ] **B** RF-03 Asistencia (elegir evento y fecha, marcar presentes/ausentes, historial)
-- [ ] **C** RF-06 Donaciones (captura, anónimas, consulta por periodo, resumen mensual, acceso restringido)
-- [ ] **D** RF-07 Anuncios (CRUD, fecha de publicación, próximos eventos y avisos importantes)
+- [ ] **C** RF-10 Configuración de la iglesia (nombre, logo, dirección, contacto, horarios) — `src/app/(app)/configuracion`
+- [ ] **B** RF-02 Miembros (alta, edición, búsqueda por nombre, filtro activos/inactivos, baja lógica) — `miembros`
+- [ ] **D** RF-05 Ministerios (CRUD, coordinador, vincular miembros) — `ministerios`
+- [ ] **D** RF-04 Eventos (CRUD, responsable, cancelar, calendario) — `eventos`
+- [ ] **B** RF-03 Asistencia (elegir evento y fecha, marcar presentes/ausentes, historial) — `asistencia`
+- [ ] **C** RF-06 Donaciones (captura, anónimas, consulta por periodo, resumen mensual, acceso restringido) — `donaciones`
+- [ ] **D** RF-07 Anuncios (CRUD, fecha de publicación, próximos eventos y avisos importantes) — `anuncios`
 
 ## Fase 2 — Cierre (sáb 31 – lun 2 nov)
 
-- [ ] **C** RF-08 Dashboard con gráficas (finanzas solo para roles autorizados)
-- [ ] **B** RF-09 Reportes: miembros, asistencia por evento, participación por ministerio, ingresos por periodo
+- [ ] **C** RF-08 Dashboard con gráficas (finanzas solo para roles autorizados) — `inicio`
+- [ ] **B** RF-09 Reportes: miembros, asistencia por evento, participación por ministerio, ingresos por periodo — `reportes`
 - [ ] **B** Exportación a Excel
 - [ ] **D** Exportación a PDF
+- [ ] **A** Alcance del coordinador (solo su ministerio) en ministerios, eventos y asistencia
 - [ ] **A** Revisión de permisos por rol (probar cada rol en cada módulo)
 - [ ] **todos** Despliegue, documentación, ensayo de la presentación
 
@@ -41,4 +43,4 @@ Reparto sugerido entre 4 personas (ajústenlo): **A**, **B**, **C**, **D**. Cada
 
 - [ ] ¿Los miembros tienen acceso propio al sistema? Los roles de RF-01 son solo staff, así que se asume que no; confirmar con el profesor.
 - [ ] Confirmar matriz de roles (ver `src/lib/permissions.ts`).
-- [ ] Recuperación de contraseña: enlace por Resend o mostrado en pantalla/consola para la demo.
+- [x] Recuperación de contraseña: enlace por Resend si hay `RESEND_API_KEY`; si no, se muestra en pantalla y en consola (modo demo).
