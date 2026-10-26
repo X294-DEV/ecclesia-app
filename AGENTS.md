@@ -20,7 +20,8 @@ Objetivo: cubrir los requerimientos funcionales RF-01 a RF-10 con algo que funci
 - **Auth.js v5** (`next-auth@beta`), credenciales correo + contraseña, sesión JWT, hash con bcryptjs
 - Tailwind v4 (sin shadcn por ahora; clases reutilizables en `src/components/ui/styles.ts`)
 - Validación: **Zod 4** (`z.email()`, `z.flattenError()`)
-- Por agregar según el módulo: FullCalendar (eventos), Recharts (dashboard), exceljs (Excel), jsPDF + autotable o @react-pdf/renderer (PDF)
+- Exportación: exceljs + jsPDF/jspdf-autotable, envueltos en `src/lib/export.ts` (no usarlos directo)
+- Por agregar según el módulo: FullCalendar (eventos), Recharts (dashboard)
 
 ## Particularidades de Next.js 16 (importante)
 
@@ -65,6 +66,7 @@ prisma/
 3. **Formularios**: `<ActionForm action={miAccion} fields={[...]} submitLabel="Guardar" />`. Los campos se definen con una lista (text, email, password, number, date, time, textarea, select, checkbox).
 4. **Tablas**: `<DataTable rows={...} getKey={...} columns={[{ header, cell }]} />`.
 5. El menú ya incluye tu módulo (`src/lib/nav.ts`) y se oculta solo si el rol no tiene permiso.
+6. **Reporte (RF-09)**: escribe una función que devuelva un `ExportTable` y regístrala en `REPORTS` (`src/server/reports.ts`) con su permiso. La página `/reportes` la lista y `/reportes/exportar/<clave>?formato=xlsx|pdf` la descarga. Ejemplo: `miembros`.
 
 ## Convenciones
 

@@ -4,14 +4,14 @@ Estado: `[ ]` pendiente · `[~]` en curso / escrito y por probar · `[x]` listo
 Reparto entre 4 personas: **A**, **B**, **C**, **D**. Cada quien toma módulos completos (BD + server actions + pantalla).
 **Cómo empezar un módulo:** copiar el patrón de `src/app/(app)/usuarios/page.tsx` y `src/server/users.ts` (ver `AGENTS.md`). Cada módulo ya tiene una página placeholder: se reemplaza.
 
-## Fase 0 — Base (A) — escrita, falta probarla en cada máquina
+## Fase 0 — Base (A) — lista (PR #1)
 
-- [~] **A** Scaffolding Next.js 16 + Tailwind, conexión a Postgres, primera migración
-- [~] **A** Auth.js con credenciales, roles en sesión, `proxy.ts`, `requireCan()`
-- [~] **A** `permissions.ts` integrado + layout con menú según rol
-- [~] **A** Componentes genéricos: `DataTable`, `ActionForm`, `PageHeader`
-- [~] **A** RF-01 completo: registrar usuarios, activar/desactivar, login/logout, recuperar contraseña, restringir por rol
-- [~] **A** Seed con un usuario por rol y datos de demo
+- [x] **A** Scaffolding Next.js 16 + Tailwind, conexión a Postgres, primera migración
+- [x] **A** Auth.js con credenciales, roles en sesión, `proxy.ts`, `requireCan()`
+- [x] **A** `permissions.ts` integrado + layout con menú según rol
+- [x] **A** Componentes genéricos: `DataTable`, `ActionForm`, `PageHeader`
+- [x] **A** RF-01 completo: registrar usuarios, activar/desactivar, login/logout, recuperar contraseña, restringir por rol
+- [x] **A** Seed con un usuario por rol y datos de demo
 
 ## Fase 1 — Módulos (mié 28 – sáb 31)
 
@@ -26,9 +26,11 @@ Reparto entre 4 personas: **A**, **B**, **C**, **D**. Cada quien toma módulos c
 ## Fase 2 — Cierre (sáb 31 – lun 2 nov)
 
 - [ ] **C** RF-08 Dashboard con gráficas (finanzas solo para roles autorizados) — `inicio`
-- [ ] **B** RF-09 Reportes: miembros, asistencia por evento, participación por ministerio, ingresos por periodo — `reportes`
-- [ ] **B** Exportación a Excel
-- [ ] **D** Exportación a PDF
+- [x] **A** Helper de exportación Excel/PDF (`src/lib/export.ts`) + registro de reportes (`src/server/reports.ts`) + página `reportes`
+- [x] **A** RF-09 Reporte general de miembros
+- [ ] **B** RF-09 Reporte de asistencia por evento (agregarlo a `REPORTS`)
+- [ ] **D** RF-09 Reporte de participación por ministerio (agregarlo a `REPORTS`)
+- [ ] **C** RF-09 Reporte de ingresos por periodo (agregarlo a `REPORTS`, permiso `reports:finance`)
 - [ ] **A** Alcance del coordinador (solo su ministerio) en ministerios, eventos y asistencia
 - [ ] **A** Revisión de permisos por rol (probar cada rol en cada módulo)
 - [ ] **todos** Despliegue, documentación, ensayo de la presentación
