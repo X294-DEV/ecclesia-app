@@ -44,6 +44,8 @@ src/
     action-state.ts         # tipo de respuesta de las server actions
   server/
     session.ts              # getCurrentUser, requireUser, requireCan, requireAnyCan
+    scope.ts                # alcance del coordinador (ministryScope, eventScope, attendanceScope)
+    reports.ts              # registro de reportes exportables (RF-09)
     users.ts                # EJEMPLO de server actions (RF-01)
     auth-actions.ts, password-actions.ts
   components/
@@ -77,7 +79,7 @@ prisma/
 - **Donaciones anónimas:** `memberId` nulo es válido; no forzar asociación.
 - **Finanzas:** solo roles con `donations:read` / `dashboard:finance` / `reports:finance`.
 - Responsable de evento y coordinador de ministerio apuntan a `Member`, no a `User`.
-- **Coordinador:** además de los permisos, sus consultas de ministerios/eventos/asistencia se limitan a su ministerio (ver `scopeToOwnMinistry` en `permissions.ts`).
+- **Coordinador:** solo ve y edita sus ministerios (los que coordina el miembro vinculado a su usuario). En ministerios, eventos y asistencia usar `src/server/scope.ts`: `where: await ministryScope(user)` / `eventScope(user)` / `attendanceScope(user)` en las consultas, y `assertMinistryInScope(user, ministryId)` / `assertEventInScope(user, eventId)` en las server actions de escritura. Para los demás roles no filtran nada.
 - Fechas: `DateTime` en BD; los horarios (`time`) son texto `"HH:mm"`.
 
 ## Cómo trabajar con un agente de IA (ahorrar tokens)

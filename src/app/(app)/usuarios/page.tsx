@@ -16,7 +16,12 @@ export default async function UsuariosPage() {
 
   const users = await db.user.findMany({
     orderBy: { createdAt: "asc" },
-    select: { id: true, name: true, email: true, role: true, active: true },
+    select: { id: true, name: true, email: true, role: true, active: true, member: { select: { name: true } } },
+  });
+  const members = await db.member.findMany({
+    where: { active: true, user: null },
+    orderBy: { name: "asc" },
+    select: { id: true, name: true },
   });
 
   return (
@@ -31,6 +36,7 @@ export default async function UsuariosPage() {
             { header: "Nombre", cell: (user) => user.name },
             { header: "Correo", cell: (user) => user.email },
             { header: "Rol", cell: (user) => ROLE_LABELS[user.role] },
+            { header: "Miembro", cell: (user) => user.member?.name ?? <span className="text-muted">—</span> },
             {
               header: "Estado",
               cell: (user) => (
@@ -72,6 +78,12 @@ export default async function UsuariosPage() {
                 autoComplete: "new-password",
               },
               { name: "role", label: "Rol", type: "select", required: true, options: ROLE_OPTIONS },
+              {
+                name: "memberId",
+                label: "Miembro vinculado (obligatorio para coordinador)",
+                type: "select",
+                options: members.map((member) => ({ value: member.id, label: member.name })),
+              },
             ]}
           />
         </section>
