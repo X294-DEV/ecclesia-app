@@ -51,3 +51,21 @@ Contraseña: el valor de `SEED_PASSWORD` en tu `.env` (por defecto `Ecclesia2026
 ## Equipo
 
 4 integrantes. Flujo de ramas y Pull Requests descrito en `AGENTS.md`.
+
+## PostgreSQL en Docker (desarrollo)
+
+Con Docker Desktop iniciado, copia `.env.example` a `.env` si aún no existe.
+Configura `POSTGRES_USER`, `POSTGRES_PASSWORD` y `POSTGRES_PORT`; `DATABASE_URL`
+debe usar esas mismas credenciales y puerto, con host `localhost` y base `ecclesia`.
+Genera también `AUTH_SECRET` según las instrucciones de `.env.example`.
+
+```bash
+docker compose up -d --wait db
+npx prisma migrate deploy
+npm run db:seed
+npm run dev
+```
+
+La aplicación se ejecuta en Windows y PostgreSQL en el contenedor. Los datos
+persisten en el volumen `postgres_data`. Para detener la base conservando datos:
+`docker compose stop db`. El puerto de PostgreSQL se publica solo en `127.0.0.1`.
