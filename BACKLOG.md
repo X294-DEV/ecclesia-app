@@ -16,7 +16,7 @@ Reparto entre 4 personas: **A**, **B**, **C**, **D**. Cada quien toma módulos c
 ## Fase 1 — Módulos (mié 28 – sáb 31)
 
 - [ ] **C** RF-10 Configuración de la iglesia (nombre, logo, dirección, contacto, horarios) — `src/app/(app)/configuracion`
-- [ ] **B** RF-02 Miembros (alta, edición, búsqueda por nombre, filtro activos/inactivos, baja lógica) — `miembros`
+- [x] **B** RF-02 Miembros (alta, edición, búsqueda por nombre, filtro activos/inactivos, baja lógica) — `miembros`
 - [ ] **D** RF-05 Ministerios (CRUD, coordinador, vincular miembros) — `ministerios`
 - [ ] **D** RF-04 Eventos (CRUD, responsable, cancelar, calendario) — `eventos`
 - [ ] **B** RF-03 Asistencia (elegir evento y fecha, marcar presentes/ausentes, historial) — `asistencia`
