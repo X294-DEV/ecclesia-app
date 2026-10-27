@@ -14,6 +14,11 @@ const createUserSchema = z.object({
   role: z.enum(["ADMIN", "PASTOR", "SECRETARIO", "TESORERO", "COORDINADOR"], {
     error: "Selecciona un rol.",
   }),
+  // Miembro vinculado (opcional; obligatorio para coordinadores, ver src/server/scope.ts).
+  memberId: z.string().optional().transform((value) => value || undefined),
+}).refine((data) => data.role !== "COORDINADOR" || data.memberId, {
+  path: ["memberId"],
+  message: "El coordinador debe estar vinculado a un miembro.",
 });
 
 /** RF-01: registrar usuarios del sistema (solo administrador). */
@@ -24,7 +29,12 @@ export async function createUserAction(
   await requireCan("users:manage");
 
   const raw = Object.fromEntries(formData) as Record<string, string>;
-  const values = { name: raw.name ?? "", email: raw.email ?? "", role: raw.role ?? "" };
+  const values = {
+    name: raw.name ?? "",
+    email: raw.email ?? "",
+    role: raw.role ?? "",
+    memberId: raw.memberId ?? "",
+  };
 
   const parsed = createUserSchema.safeParse(raw);
   if (!parsed.success) {
@@ -39,12 +49,19 @@ export async function createUserAction(
   if (exists) {
     return { fieldErrors: { email: ["Ya existe un usuario con ese correo."] }, values };
   }
+  if (parsed.data.memberId) {
+    const linked = await db.user.findUnique({ where: { memberId: parsed.data.memberId } });
+    if (linked) {
+      return { fieldErrors: { memberId: ["Ese miembro ya tiene un usuario."] }, values };
+    }
+  }
 
   await db.user.create({
     data: {
       name: parsed.data.name,
       email: parsed.data.email,
       role: parsed.data.role,
+      memberId: parsed.data.memberId,
       passwordHash: await bcrypt.hash(parsed.data.password, 10),
     },
   });

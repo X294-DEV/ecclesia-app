@@ -113,6 +113,13 @@ async function seedDemoData(userIds: Record<string, string>) {
       await prisma.ministry.create({ data: { ...def, coordinatorId: members[index].id } }),
     );
   }
+  // La coordinadora de demostración queda vinculada al coordinador de "Jóvenes"
+  // para que el alcance por ministerio (src/server/scope.ts) tenga datos.
+  await prisma.user.update({
+    where: { id: userIds[Role.COORDINADOR] },
+    data: { memberId: ministries[1].coordinatorId },
+  });
+
   await prisma.ministryMember.createMany({
     data: members
       .filter((member) => member.active)
