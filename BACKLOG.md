@@ -19,7 +19,7 @@ Reparto entre 4 personas: **A**, **B**, **C**, **D**. Cada quien toma módulos c
 - [x] **B** RF-02 Miembros (alta, edición, búsqueda por nombre, filtro activos/inactivos, baja lógica) — `miembros`
 - [ ] **D** RF-05 Ministerios (CRUD, coordinador, vincular miembros) — `ministerios`
 - [ ] **D** RF-04 Eventos (CRUD, responsable, cancelar, calendario) — `eventos`
-- [ ] **B** RF-03 Asistencia (elegir evento y fecha, marcar presentes/ausentes, historial) — `asistencia`
+- [x] **B** RF-03 Asistencia (elegir evento y fecha, marcar presentes/ausentes, historial) — `asistencia`
 - [ ] **C** RF-06 Donaciones (captura, anónimas, consulta por periodo, resumen mensual, acceso restringido) — `donaciones`
 - [ ] **D** RF-07 Anuncios (CRUD, fecha de publicación, próximos eventos y avisos importantes) — `anuncios`
 
@@ -32,7 +32,8 @@ Reparto entre 4 personas: **A**, **B**, **C**, **D**. Cada quien toma módulos c
 - [ ] **D** RF-09 Reporte de participación por ministerio (agregarlo a `REPORTS`)
 - [ ] **C** RF-09 Reporte de ingresos por periodo (agregarlo a `REPORTS`, permiso `reports:finance`)
 - [x] **A** Alcance del coordinador: helpers en `src/server/scope.ts` + usuario vinculado a miembro
-- [ ] **B, D** Usar `scope.ts` en ministerios, eventos y asistencia (ver `AGENTS.md`)
+- [x] **B** Usar `scope.ts` en asistencia (consultas y guardado)
+- [ ] **D** Usar `scope.ts` en ministerios y eventos (ver `AGENTS.md`)
 - [ ] **A** Revisión de permisos por rol (probar cada rol en cada módulo)
 - [ ] **todos** Despliegue, documentación, ensayo de la presentación
 
