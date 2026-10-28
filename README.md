@@ -8,6 +8,7 @@ Sistema de gestión para iglesias: miembros, asistencia, eventos, ministerios, d
 - `BACKLOG.md` — tareas, reparto y estado
 - `prisma/schema.prisma` — modelo de datos
 - `src/lib/permissions.ts` — matriz de roles y permisos
+- `docs/despliegue.md` — cómo publicar en Vercel + Neon
 
 ## Requisitos
 
@@ -31,6 +32,10 @@ npx prisma db seed          # carga usuarios y datos de demostración
 # 4. Desarrollo
 npm run dev                 # http://localhost:3000
 ```
+
+## Revisión de permisos
+
+Con la app corriendo, `npm run check:permisos` inicia sesión con cada rol y comprueba el menú, cada página y cada reporte contra `src/lib/permissions.ts`.
 
 ## Usuarios de demostración
 

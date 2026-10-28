@@ -34,7 +34,8 @@ Reparto entre 4 personas: **A**, **B**, **C**, **D**. Cada quien toma módulos c
 - [x] **A** Alcance del coordinador: helpers en `src/server/scope.ts` + usuario vinculado a miembro
 - [x] **B** Usar `scope.ts` en asistencia (consultas y guardado)
 - [ ] **D** Usar `scope.ts` en ministerios y eventos (ver `AGENTS.md`)
-- [ ] **A** Revisión de permisos por rol (probar cada rol en cada módulo)
+- [~] **A** Revisión de permisos por rol: `npm run check:permisos` (correrlo de nuevo cuando entren todos los módulos)
+- [~] **A** Despliegue preparado (`docs/despliegue.md`); falta crear Neon y Vercel
 - [ ] **todos** Despliegue, documentación, ensayo de la presentación
 
 ## Si hay atraso, recortar en este orden
