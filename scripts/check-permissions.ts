@@ -9,7 +9,8 @@ import { NAV_ITEMS } from "@/lib/nav";
 import { can, type Role } from "@/lib/permissions";
 import { REPORTS } from "@/server/reports";
 
-const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
+// Sin "/" final: una doble barra en la URL hace que el POST del login se redirija y se pierda.
+const BASE_URL = (process.env.BASE_URL ?? "http://localhost:3000").trim().replace(/\/+$/, "");
 const PASSWORD = process.env.SEED_PASSWORD ?? "Ecclesia2026!";
 const ROLES: Role[] = ["ADMIN", "PASTOR", "SECRETARIO", "TESORERO", "COORDINADOR"];
 
@@ -35,7 +36,15 @@ async function login(email: string) {
     body: new URLSearchParams({ csrfToken, email, password: PASSWORD }),
   });
   const cookie = cookieHeader(response, jar);
-  if (!cookie.includes("session-token")) throw new Error(`No se pudo iniciar sesión con ${email}`);
+  if (!cookie.includes("session-token")) {
+    const location = response.headers.get("location") ?? "(sin redirección)";
+    throw new Error(
+      `No se pudo iniciar sesión con ${email}\n` +
+        `  respuesta: ${response.status} -> ${location}\n` +
+        `  Si termina en error=CredentialsSignin: el usuario no existe o la contraseña no coincide con SEED_PASSWORD.\n` +
+        `  Si termina en error=Configuration: revisa AUTH_SECRET y la base en Vercel.`,
+    );
+  }
   return cookie;
 }
 
