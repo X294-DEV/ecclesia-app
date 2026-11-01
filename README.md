@@ -9,6 +9,7 @@ Sistema de gestión para iglesias: miembros, asistencia, eventos, ministerios, d
 - `prisma/schema.prisma` — modelo de datos
 - `src/lib/permissions.ts` — matriz de roles y permisos
 - `docs/despliegue.md` — cómo publicar en Vercel + Neon
+- `docs/desarrollo.md` — cómo trabajar en local (cada quien con su Postgres)
 
 ## Requisitos
 

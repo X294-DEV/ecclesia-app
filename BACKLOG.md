@@ -35,7 +35,7 @@ Reparto entre 4 personas: **A**, **B**, **C**, **D**. Cada quien toma módulos c
 - [x] **B** Usar `scope.ts` en asistencia (consultas y guardado)
 - [ ] **D** Usar `scope.ts` en ministerios y eventos (ver `AGENTS.md`)
 - [~] **A** Revisión de permisos por rol: `npm run check:permisos` (correrlo de nuevo cuando entren todos los módulos)
-- [~] **A** Despliegue preparado (`docs/despliegue.md`); falta crear Neon y Vercel
+- [x] **A** Desplegado en Vercel + Neon (producción, redeploy automático al mergear a `main`). La URL de Neon es secreta: NO se comparte; el desarrollo local usa su propio Postgres (ver `docs/desarrollo.md`)
 - [ ] **todos** Despliegue, documentación, ensayo de la presentación
 
 ## Si hay atraso, recortar en este orden
