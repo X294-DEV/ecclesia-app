@@ -16,7 +16,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ repo
   const searchParams = new URL(request.url).searchParams;
   const format: ExportFormat = searchParams.get("formato") === "pdf" ? "pdf" : "xlsx";
 
-  const table = await report.build(searchParams);
+  const table = await report.build(searchParams, user);
   const file = await exportTable(table, format);
   const filename = `${key}-${new Date().toISOString().slice(0, 10)}.${format}`;
 
