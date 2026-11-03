@@ -18,6 +18,8 @@
   --success: #5fb98a;
   --accent: #5c5a55; /* gris piedra: selección, cabeceras de tabla y barras */
   --glow: color-mix(in srgb, var(--brand) 30%, transparent);
+  --parchment: #e9e3d2; /* superficie clara: tarjetas de evento y pestaña activa del menú */
+  --ink: #1a1815; /* texto sobre pergamino */
 }
 
 @theme inline {
@@ -33,7 +35,9 @@
   --color-accent: var(--accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-cinzel);
+  --color-parchment: var(--parchment);
+  --color-ink: var(--ink);
+  --font-display: var(--font-playfair);
 }
 
 body {
@@ -58,13 +62,13 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Títulos y menú en Cinzel; tablas y formularios conservan la fuente de lectura. */
+/* Títulos y menú en serif de contraste alto (Playfair); tablas y formularios conservan la fuente de lectura. */
 h1,
 h2,
 h3,
 .font-display {
   font-family: var(--font-display), Georgia, serif;
-  letter-spacing: 0.02em;
+  letter-spacing: 0;
 }
 
 /* Foco visible dorado en todo control. */
@@ -165,6 +169,20 @@ main > *:nth-child(4) {
   transform-box: fill-box;
 }
 
+/* Acercamiento muy lento de la nave en la pantalla de acceso. */
+@keyframes nave-drift {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+.nave-drift {
+  animation: nave-drift 40s ease-in-out infinite alternate;
+  transform-origin: 40% 30%;
+}
+
 /* Rayos de luz y motas de polvo de la pantalla de acceso. */
 @keyframes ray-drift {
   0%,
@@ -207,6 +225,11 @@ main > *:nth-child(4) {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   animation: arch-draw 1.8s ease-out 0.2s forwards;
+}
+
+/* Pestaña activa del menú con punta de flecha a la derecha. */
+.gothic-tab {
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%);
 }
 
 /* Inclinación 3D suave al pasar el mouse (tarjetas de evento). */

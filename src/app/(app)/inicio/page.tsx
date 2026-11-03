@@ -1,6 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { MonthlyBarChart } from "@/components/ui/charts";
-import { GothicDivider, OgivePanel, RoseWindow, TraceryCorners } from "@/components/ui/gothic";
+import { assignEventArt } from "@/components/ui/event-art";
+import { GothicDivider, TraceryCorners } from "@/components/ui/gothic";
 import { PageHeader } from "@/components/ui/page-header";
 import { cardClass } from "@/components/ui/styles";
 import { formatMoney } from "@/lib/money";
@@ -63,20 +65,31 @@ export default async function InicioPage() {
               <p className={`${cardClass} text-center text-sm text-muted`}>No hay eventos próximos.</p>
             ) : (
               <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                {general.upcomingEvents.slice(0, 3).map((event) => (
+                {general.upcomingEvents.slice(0, 3).map((event, index, shown) => (
                   <li key={event.id} className="gothic-tilt min-w-0">
-                    <OgivePanel
-                      draw={false}
-                      bodyClassName="px-4 pb-4 pt-2 text-center"
-                      emblem={<RoseWindow spin className="h-9 w-9 opacity-80" />}
-                    >
-                      <h3 className="font-display text-lg leading-snug">{event.title}</h3>
-                      <p className="mt-1 text-sm text-brand">
-                        <span className="inline-block first-letter:uppercase">{dateFormat.format(event.date)}</span> ·{" "}
-                        {event.time}
-                      </p>
-                      <p className="mt-0.5 truncate text-xs text-muted">{event.location}</p>
-                    </OgivePanel>
+                    <article className="overflow-hidden rounded-sm border border-brand bg-parchment text-ink shadow-[0_14px_30px_-14px_rgb(0_0_0/0.8)]">
+                      <Image
+                        src={assignEventArt(shown.map((item) => item.title))[index]}
+                        alt=""
+                        width={388}
+                        height={304}
+                        sizes="(min-width: 1280px) 30vw, (min-width: 640px) 45vw, 100vw"
+                        className="block h-auto w-full"
+                      />
+                      <div className="p-4">
+                        <h3 className="font-display text-xl font-bold leading-snug">{event.title}</h3>
+                        <p className="mt-2 text-sm font-medium">
+                          <span className="inline-block first-letter:uppercase">{dateFormat.format(event.date)}</span> ·{" "}
+                          {event.time}
+                        </p>
+                        <p className="mt-0.5 truncate text-sm text-ink/75">{event.location}</p>
+                        {can(user.role, "events:read") && (
+                          <Link href="/eventos" className="mt-3 inline-block text-sm font-medium underline underline-offset-4">
+                            Ver evento →
+                          </Link>
+                        )}
+                      </div>
+                    </article>
                   </li>
                 ))}
               </ul>
