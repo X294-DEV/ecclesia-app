@@ -7,17 +7,17 @@
  */
 :root {
   color-scheme: dark;
-  --background: #0d0b10;
-  --surface: #17131c;
-  --foreground: #e9e1d0; /* pergamino */
-  --muted: #a39a8a;
-  --border: #3a2f3f;
-  --brand: #c9a24a; /* oro antiguo */
-  --brand-foreground: #14100a;
+  --background: #101010; /* piedra negra */
+  --surface: #191918;
+  --foreground: #ece7da; /* hueso */
+  --muted: #a8a496;
+  --border: #3d3c38; /* junta de sillería */
+  --brand: #e3dcc8; /* hueso claro: bordes, botones, enlaces y foco */
+  --brand-foreground: #151412;
   --danger: #e0685c;
   --success: #5fb98a;
-  --accent: #7a1f2b; /* burdeos */
-  --gold-glow: rgb(201 162 74 / 0.35);
+  --accent: #5c5a55; /* gris piedra: selección, cabeceras de tabla y barras */
+  --glow: color-mix(in srgb, var(--brand) 30%, transparent);
 }
 
 @theme inline {
@@ -38,7 +38,7 @@
 
 body {
   background:
-    radial-gradient(ellipse 80% 40% at 50% -10%, rgb(122 31 43 / 0.22), transparent 70%),
+    radial-gradient(ellipse 80% 40% at 50% -10%, color-mix(in srgb, var(--brand) 9%, transparent), transparent 70%),
     radial-gradient(ellipse 120% 90% at 50% 50%, transparent 55%, rgb(0 0 0 / 0.45) 100%),
     var(--background);
   background-attachment: fixed;
@@ -84,7 +84,7 @@ h3,
   background-image: linear-gradient(180deg, rgb(255 255 255 / 0.04), transparent 45%);
   box-shadow:
     inset 0 0 0 3px var(--surface),
-    inset 0 0 0 4px rgb(201 162 74 / 0.4),
+    inset 0 0 0 4px color-mix(in srgb, var(--brand) 40%, transparent),
     0 12px 28px -12px rgb(0 0 0 / 0.65);
 }
 
@@ -123,7 +123,7 @@ h3,
     border-color 0.2s ease;
 }
 .gothic-glow:hover:not(:disabled) {
-  box-shadow: 0 0 14px var(--gold-glow);
+  box-shadow: 0 0 14px var(--glow);
 }
 
 /* Entrada: el contenido de cada página sube y aparece en cascada. */

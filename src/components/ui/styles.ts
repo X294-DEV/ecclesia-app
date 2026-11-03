@@ -2,7 +2,7 @@
 // Tema gótico: usa estas clases y los componentes de src/components/ui; no escribas colores a mano.
 
 export const inputClass =
-  "w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30 disabled:opacity-60";
+  "w-full rounded-md border border-brand/50 bg-background px-3 py-2 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30 disabled:opacity-60";
 
 export const buttonClass =
   "gothic-glow inline-flex items-center justify-center rounded-md border border-brand bg-brand px-4 py-2 text-sm font-semibold text-brand-foreground hover:brightness-110 disabled:opacity-60";
