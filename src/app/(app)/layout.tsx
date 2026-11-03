@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { NavLinks } from "@/components/layout/nav-links";
-import { RoseWindow } from "@/components/ui/gothic";
+import { Arch, RoseWindow } from "@/components/ui/gothic";
 import { buttonGhostClass } from "@/components/ui/styles";
 import { db } from "@/lib/db";
 import { NAV_ITEMS } from "@/lib/nav";
@@ -32,8 +32,9 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
               className="h-10 w-10 shrink-0 rounded-md border border-brand/40 bg-background object-contain p-0.5"
             />
           )}
+          {!church?.logoUrl && <Arch className="h-9 w-14 shrink-0" />}
           <div className="min-w-0">
-            <p className="font-display text-lg font-semibold uppercase tracking-[0.25em] text-brand">Ecclesia</p>
+            <p className="font-display text-2xl font-bold text-brand">Ecclesia</p>
             {church?.name && <p className="truncate text-xs text-muted">{church.name}</p>}
           </div>
         </div>

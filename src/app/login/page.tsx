@@ -18,7 +18,11 @@ export default async function LoginPage({
   const { reset } = await searchParams;
 
   return (
-    <AuthShell title="Iniciar sesión" subtitle="Ingresa con tu correo y contraseña.">
+    <AuthShell
+      title="Bienvenido"
+      subtitle="Accede a tu comunidad"
+      footer="¿Necesitas ayuda? Contacta a tu iglesia."
+    >
       {reset && (
         <p role="status" className="text-sm text-success">
           Tu contraseña se actualizó. Ya puedes iniciar sesión.
@@ -26,15 +30,17 @@ export default async function LoginPage({
       )}
       <ActionForm
         action={loginAction}
-        submitLabel="Entrar"
+        submitLabel="Iniciar sesión"
+        block
         fields={[
-          { name: "email", label: "Correo", type: "email", required: true, autoComplete: "username" },
+          { name: "email", label: "Correo electrónico", type: "email", required: true, autoComplete: "username", icon: "mail", placeholder: "tu@correo.com" },
           {
             name: "password",
             label: "Contraseña",
             type: "password",
             required: true,
             autoComplete: "current-password",
+            icon: "lock",
           },
         ]}
       />
