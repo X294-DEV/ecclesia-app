@@ -13,6 +13,8 @@ Reparto entre 4 personas: **A**, **B**, **C**, **D**. Cada quien toma módulos c
 - [x] **A** RF-01 completo: registrar usuarios, activar/desactivar, login/logout, recuperar contraseña, restringir por rol
 - [x] **A** Seed con un usuario por rol y datos de demo
 
+- [x] **C** Rediseño gótico (tokens en `globals.css`, `ui/gothic.tsx`, `styles.ts`, layout y pantallas públicas). Regla: usa los componentes de `src/components/ui` y las clases de `styles.ts`; no escribas colores a mano.
+
 ## Fase 1 — Módulos (mié 28 – sáb 31)
 
 - [ ] **C** RF-10 Configuración de la iglesia (nombre, logo, dirección, contacto, horarios) — `src/app/(app)/configuracion`

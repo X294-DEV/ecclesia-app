@@ -67,6 +67,7 @@ export function ActionForm({ action, fields, submitLabel, hidden, columns = 1 }:
                     id={id}
                     name={field.name}
                     type="checkbox"
+                    className="accent-brand"
                     defaultChecked={
                       state.values ? state.values[field.name] === "on" : Boolean(field.defaultValue)
                     }
@@ -142,7 +143,7 @@ export function ActionForm({ action, fields, submitLabel, hidden, columns = 1 }:
         </p>
       )}
       {state.devLink && (
-        <p className="break-all rounded-md border border-border bg-background p-3 text-xs">
+        <p className="break-all rounded-md border border-brand/40 bg-background p-3 text-xs">
           Modo demostración (sin correo configurado):{" "}
           <a className="underline" href={state.devLink}>
             {state.devLink}

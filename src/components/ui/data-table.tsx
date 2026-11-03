@@ -21,9 +21,9 @@ type Props<T> = {
  */
 export function DataTable<T>({ columns, rows, getKey, empty = "No hay registros." }: Props<T>) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-border bg-surface">
+    <div className="overflow-x-auto gothic-card rounded-lg bg-surface">
       <table className="w-full text-left text-sm">
-        <thead className="border-b border-border text-muted">
+        <thead className="border-b border-brand/40 bg-accent/25 font-display text-brand">
           <tr>
             {columns.map((column) => (
               <th key={column.header} className={`px-4 py-3 font-medium ${column.className ?? ""}`}>
@@ -41,7 +41,7 @@ export function DataTable<T>({ columns, rows, getKey, empty = "No hay registros.
             </tr>
           ) : (
             rows.map((row) => (
-              <tr key={getKey(row)} className="border-b border-border last:border-0">
+              <tr key={getKey(row)} className="border-b border-border last:border-0 hover:bg-brand/5">
                 {columns.map((column) => (
                   <td key={column.header} className={`px-4 py-3 ${column.className ?? ""}`}>
                     {column.cell(row)}

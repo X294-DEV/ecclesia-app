@@ -1,29 +1,23 @@
 @import "tailwindcss";
 
+/*
+ * Tema "catedral": un solo tema oscuro, sin depender de prefers-color-scheme.
+ * Todo el color vive aquí; las páginas usan las clases de tokens (bg-surface, text-brand...)
+ * y los componentes de src/components/ui. No escribir colores a mano.
+ */
 :root {
-  --background: #f6f7f9;
-  --foreground: #1b1f27;
-  --surface: #ffffff;
-  --muted: #667085;
-  --border: #e3e6ec;
-  --brand: #1f3a68;
-  --brand-foreground: #ffffff;
-  --danger: #b42318;
-  --success: #067647;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0e1116;
-    --foreground: #e8eaef;
-    --surface: #161b22;
-    --muted: #9aa3b2;
-    --border: #2a3140;
-    --brand: #7aa2f7;
-    --brand-foreground: #0e1116;
-    --danger: #f97066;
-    --success: #47cd89;
-  }
+  color-scheme: dark;
+  --background: #0d0b10;
+  --surface: #17131c;
+  --foreground: #e9e1d0; /* pergamino */
+  --muted: #a39a8a;
+  --border: #3a2f3f;
+  --brand: #c9a24a; /* oro antiguo */
+  --brand-foreground: #14100a;
+  --danger: #e0685c;
+  --success: #5fb98a;
+  --accent: #7a1f2b; /* burdeos */
+  --gold-glow: rgb(201 162 74 / 0.35);
 }
 
 @theme inline {
@@ -36,12 +30,94 @@
   --color-brand-foreground: var(--brand-foreground);
   --color-danger: var(--danger);
   --color-success: var(--success);
+  --color-accent: var(--accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-cinzel);
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgb(122 31 43 / 0.22), transparent 70%),
+    var(--background);
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Títulos y menú en Cinzel; tablas y formularios conservan la fuente de lectura. */
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+  letter-spacing: 0.02em;
+}
+
+/* Foco visible dorado en todo control. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--foreground);
+}
+
+/* Doble borde dorado fino (tarjetas): línea exterior + línea interior hundida. */
+.gothic-card {
+  border: 1px solid var(--brand);
+  box-shadow:
+    inset 0 0 0 3px var(--surface),
+    inset 0 0 0 4px rgb(201 162 74 / 0.4);
+}
+
+/* Esquinas ornamentadas para tarjetas importantes (clase opcional). */
+.gothic-corners {
+  position: relative;
+}
+.gothic-corners::before,
+.gothic-corners::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--brand);
+  pointer-events: none;
+}
+.gothic-corners::before {
+  top: 6px;
+  left: 6px;
+  border-right: 0;
+  border-bottom: 0;
+  border-top-left-radius: 8px;
+}
+.gothic-corners::after {
+  right: 6px;
+  bottom: 6px;
+  border-left: 0;
+  border-top: 0;
+  border-bottom-right-radius: 8px;
+}
+
+.gothic-glow {
+  transition:
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+.gothic-glow:hover:not(:disabled) {
+  box-shadow: 0 0 14px var(--gold-glow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
