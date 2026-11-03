@@ -32,7 +32,7 @@ export function MonthlyBarChart({
           <XAxis dataKey="month" tick={AXIS} stroke="var(--border)" />
           <YAxis tick={AXIS} stroke="var(--border)" width={money ? 72 : 36} allowDecimals={false} tickFormatter={format} />
           <Tooltip
-            cursor={{ fill: "var(--gold-glow)", opacity: 0.25 }}
+            cursor={{ fill: "var(--glow)", opacity: 0.25 }}
             formatter={(value) => [format(Number(value)), label]}
             contentStyle={{
               background: "var(--surface)",
