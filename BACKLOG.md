@@ -22,7 +22,7 @@ Reparto entre 4 personas: **A**, **B**, **C**, **D**. Cada quien toma módulos c
 - [ ] **D** RF-05 Ministerios (CRUD, coordinador, vincular miembros) — `ministerios`
 - [ ] **D** RF-04 Eventos (CRUD, responsable, cancelar, calendario) — `eventos`
 - [x] **B** RF-03 Asistencia (elegir evento y fecha, marcar presentes/ausentes, historial) — `asistencia`
-- [ ] **C** RF-06 Donaciones (captura, anónimas, consulta por periodo, resumen mensual, acceso restringido) — `donaciones`
+- [x] **C** RF-06 Donaciones (captura, anónimas, consulta por periodo, resumen mensual, acceso restringido) — `donaciones`
 - [ ] **D** RF-07 Anuncios (CRUD, fecha de publicación, próximos eventos y avisos importantes) — `anuncios`
 
 ## Fase 2 — Cierre (sáb 31 – lun 2 nov)
