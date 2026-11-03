@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Prisma } from "@prisma/client";
-import { z } from "zod";
 import { ActionForm } from "@/components/ui/action-form";
 import { DataTable } from "@/components/ui/data-table";
 import { GothicDivider } from "@/components/ui/gothic";
@@ -9,6 +8,7 @@ import { buttonClass, buttonGhostClass, cardClass, inputClass } from "@/componen
 import { db } from "@/lib/db";
 import { formatMoney } from "@/lib/money";
 import { can } from "@/lib/permissions";
+import { parseIsoDate, periodWhere } from "@/lib/period";
 import { createDonationAction } from "@/server/donations";
 import { requireCan } from "@/server/session";
 
@@ -24,33 +24,16 @@ const METHOD_OPTIONS = Object.entries(METHOD_LABELS).map(([value, label]) => ({ 
 
 type Query = { desde?: string | string[]; hasta?: string | string[] };
 
-/** Devuelve la fecha solo si es un YYYY-MM-DD válido; cualquier otra cosa se ignora. */
-function parseDate(value: string | string[] | undefined) {
-  const parsed = z.iso.date().safeParse(typeof value === "string" ? value : "");
-  return parsed.success ? parsed.data : "";
-}
-
 // RF-06: donaciones. Solo roles con donations:read ven montos (admin, pastor y tesorero).
 export default async function DonacionesPage({ searchParams }: { searchParams: Promise<Query> }) {
   const user = await requireCan("donations:read");
   const canWrite = can(user.role, "donations:write");
 
   const query = await searchParams;
-  const desde = parseDate(query.desde);
-  const hasta = parseDate(query.hasta);
+  const desde = parseIsoDate(query.desde);
+  const hasta = parseIsoDate(query.hasta);
 
-  // El día "hasta" se incluye completo (hasta antes de la medianoche UTC del día siguiente),
-  // porque una donación puede traer hora y no solo la fecha.
-  const dayAfterHasta = hasta ? new Date(new Date(`${hasta}T00:00:00.000Z`).getTime() + 24 * 60 * 60 * 1000) : null;
-  const where: Prisma.DonationWhereInput =
-    desde || hasta
-      ? {
-          date: {
-            ...(desde ? { gte: new Date(`${desde}T00:00:00.000Z`) } : {}),
-            ...(dayAfterHasta ? { lt: dayAfterHasta } : {}),
-          },
-        }
-      : {};
+  const where = periodWhere(desde, hasta);
 
   const donations = await db.donation.findMany({
     where,

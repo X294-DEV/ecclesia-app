@@ -32,7 +32,7 @@ Reparto entre 4 personas: **A**, **B**, **C**, **D**. Cada quien toma módulos c
 - [x] **A** RF-09 Reporte general de miembros
 - [ ] **B** RF-09 Reporte de asistencia por evento (agregarlo a `REPORTS`)
 - [ ] **D** RF-09 Reporte de participación por ministerio (agregarlo a `REPORTS`)
-- [ ] **C** RF-09 Reporte de ingresos por periodo (agregarlo a `REPORTS`, permiso `reports:finance`)
+- [x] **C** RF-09 Reporte de ingresos por periodo (agregarlo a `REPORTS`, permiso `reports:finance`)
 - [x] **A** Alcance del coordinador: helpers en `src/server/scope.ts` + usuario vinculado a miembro
 - [x] **B** Usar `scope.ts` en asistencia (consultas y guardado)
 - [ ] **D** Usar `scope.ts` en ministerios y eventos (ver `AGENTS.md`)
