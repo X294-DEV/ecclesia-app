@@ -15,7 +15,7 @@
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset",
     "check:permisos": "tsx scripts/check-permissions.ts",
-    "vercel-build": "prisma migrate deploy && next build"
+    "vercel-build": "if [ \"$VERCEL_ENV\" = \"production\" ]; then prisma migrate deploy; fi && next build"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

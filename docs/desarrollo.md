@@ -17,7 +17,7 @@ Cada integrante trabaja con su propio Postgres local, así sus pruebas no afecta
 
 - `migrate dev` solo contra tu base local, nunca contra Neon.
 - No cambies `prisma/schema.prisma`; si necesitas un campo o tabla, avisa a A. A crea la migración y,
-  al mergearla a `main`, Vercel la aplica sola (`vercel-build` ejecuta `prisma migrate deploy`).
+  al mergearla a `main`, Vercel la aplica sola (`vercel-build` ejecuta `prisma migrate deploy` solo en producción (los previews solo compilan)).
   Después haz `git pull` y `npx prisma migrate dev` para traerla a tu base local.
 - Los PR generan un preview en Vercel, pero usa la base de producción: no pruebes ahí crear o borrar datos.
 - Nunca subas `.env` ni pegues credenciales en el repo, PR o chats.
