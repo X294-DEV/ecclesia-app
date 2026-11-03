@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import type { ExportTable } from "@/lib/export";
 import type { Action } from "@/lib/permissions";
 import { parseIsoDate, periodWhere } from "@/lib/period";
+import { ministryScope } from "@/server/scope";
+import type { CurrentUser } from "@/server/session";
 
 // Registro de reportes (RF-09). Para agregar uno:
 //   1. Escribe su `build` (consulta con Prisma -> ExportTable).
@@ -16,9 +18,10 @@ export type ReportDefinition = {
   permission: Action;
   /** Si es true, /reportes muestra los campos ?desde= y ?hasta= antes de descargar. */
   period?: boolean;
+  // `user` es opcional: solo lo usan los reportes que deben respetar el alcance del coordinador.
   // `any` porque cada reporte tiene su propio tipo de fila.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  build: (params: URLSearchParams) => Promise<ExportTable<any>>;
+  build: (params: URLSearchParams, user?: CurrentUser) => Promise<ExportTable<any>>;
 };
 
 /** Reporte general de miembros. Filtro opcional: ?estado=activos|inactivos */
@@ -85,6 +88,60 @@ async function incomeReport(params: URLSearchParams) {
   return table;
 }
 
+/**
+ * RF-09: participación por ministerio. Una fila por ministerio con su coordinador, integrantes,
+ * eventos realizados (ACTIVO con fecha hasta hoy) y asistencia total (presentes) a esos eventos.
+ * El coordinador solo recibe sus ministerios (ministryScope).
+ */
+async function ministriesReport(_params: URLSearchParams, user?: CurrentUser) {
+  const now = new Date();
+  const tomorrow = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate() + 1));
+
+  const ministries = await db.ministry.findMany({
+    where: user ? await ministryScope(user) : {},
+    orderBy: { name: "asc" },
+    select: {
+      name: true,
+      coordinator: { select: { name: true } },
+      _count: { select: { members: true } },
+      events: {
+        where: { status: "ACTIVO", date: { lt: tomorrow } },
+        select: { _count: { select: { attendances: { where: { present: true } } } } },
+      },
+    },
+  });
+
+  const rows = ministries.map((ministry) => ({
+    name: ministry.name,
+    coordinator: ministry.coordinator?.name ?? "Sin asignar",
+    members: ministry._count.members,
+    events: ministry.events.length,
+    attendance: ministry.events.reduce((sum, event) => sum + event._count.attendances, 0),
+  }));
+  type Row = (typeof rows)[number];
+
+  const table: ExportTable<Row> = {
+    title: "Reporte de participación por ministerio",
+    subtitle: `${rows.length} ministerios (eventos activos realizados hasta hoy)`,
+    rows,
+    columns: [
+      { header: "Ministerio", value: (r) => r.name, width: 30 },
+      { header: "Coordinador", value: (r) => r.coordinator, width: 28 },
+      { header: "Integrantes", value: (r) => r.members },
+      { header: "Eventos realizados", value: (r) => r.events, width: 20 },
+      { header: "Asistencia total", value: (r) => r.attendance, width: 18 },
+    ],
+    footer: [
+      "Total",
+      null,
+      null,
+      rows.reduce((sum, r) => sum + r.events, 0),
+      rows.reduce((sum, r) => sum + r.attendance, 0),
+    ],
+  };
+  return table;
+}
+
 export const REPORTS: Record<string, ReportDefinition> = {
   miembros: {
     title: "Reporte general de miembros",
@@ -99,7 +156,12 @@ export const REPORTS: Record<string, ReportDefinition> = {
     period: true,
     build: incomeReport,
   },
+  ministerios: {
+    title: "Reporte de participación por ministerio",
+    description: "Por ministerio: coordinador, integrantes, eventos realizados y asistencia total.",
+    permission: "reports:general",
+    build: ministriesReport,
+  },
   // Pendientes (cada dueño agrega el suyo con el mismo patrón):
   // asistencia:   B · asistencia por evento          · "reports:general"
-  // ministerios:  D · participación por ministerio   · "reports:general"
 };
