@@ -19,7 +19,7 @@ Reparto entre 4 personas: **A**, **B**, **C**, **D**. Cada quien toma módulos c
 
 - [x] **C** RF-10 Configuración de la iglesia (nombre, logo, dirección, contacto, horarios) — `src/app/(app)/configuracion`
 - [x] **B** RF-02 Miembros (alta, edición, búsqueda por nombre, filtro activos/inactivos, baja lógica) — `miembros`
-- [ ] **D** RF-05 Ministerios (CRUD, coordinador, vincular miembros) — `ministerios`
+- [x] **D** RF-05 Ministerios (CRUD, coordinador, vincular miembros) — `ministerios`
 - [x] **D** RF-04 Eventos (CRUD, responsable, cancelar, calendario) — `eventos`
 - [x] **B** RF-03 Asistencia (elegir evento y fecha, marcar presentes/ausentes, historial) — `asistencia`
 - [x] **C** RF-06 Donaciones (captura, anónimas, consulta por periodo, resumen mensual, acceso restringido) — `donaciones`
@@ -35,7 +35,7 @@ Reparto entre 4 personas: **A**, **B**, **C**, **D**. Cada quien toma módulos c
 - [x] **C** RF-09 Reporte de ingresos por periodo (agregarlo a `REPORTS`, permiso `reports:finance`)
 - [x] **A** Alcance del coordinador: helpers en `src/server/scope.ts` + usuario vinculado a miembro
 - [x] **B** Usar `scope.ts` en asistencia (consultas y guardado)
-- [ ] **D** Usar `scope.ts` en ministerios y eventos (ver `AGENTS.md`)
+- [x] **D** Usar `scope.ts` en ministerios y eventos (ver `AGENTS.md`)
 - [~] **A** Revisión de permisos por rol: `npm run check:permisos` (correrlo de nuevo cuando entren todos los módulos)
 - [x] **A** Desplegado en Vercel + Neon (producción, redeploy automático al mergear a `main`). La URL de Neon es secreta: NO se comparte; el desarrollo local usa su propio Postgres (ver `docs/desarrollo.md`)
 - [ ] **todos** Despliegue, documentación, ensayo de la presentación
