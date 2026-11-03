@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cinzel, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,6 +13,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const cinzel = Cinzel({
+  variable: "--font-cinzel",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: { default: "Ecclesia", template: "%s · Ecclesia" },
   description: "Sistema de gestión para iglesias: miembros, asistencia, eventos, ministerios y donaciones.",
@@ -20,7 +25,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="es" className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="es" className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} antialiased`}>
       <body className="min-h-screen">{children}</body>
     </html>
   );
