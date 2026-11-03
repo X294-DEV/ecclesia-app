@@ -85,6 +85,75 @@ async function incomeReport(params: URLSearchParams) {
   return table;
 }
 
+/** RF-09: asistencia por evento. Filtro opcional: ?desde=YYYY-MM-DD&hasta=YYYY-MM-DD (fecha del evento) */
+async function attendanceReport(params: URLSearchParams) {
+  const desde = parseIsoDate(params.get("desde"));
+  const hasta = parseIsoDate(params.get("hasta"));
+  const dayAfterHasta = hasta ? new Date(new Date(`${hasta}T00:00:00.000Z`).getTime() + 24 * 60 * 60 * 1000) : null;
+  const events = await db.event.findMany({
+    where:
+      desde || hasta
+        ? {
+            date: {
+              ...(desde ? { gte: new Date(`${desde}T00:00:00.000Z`) } : {}),
+              ...(dayAfterHasta ? { lt: dayAfterHasta } : {}),
+            },
+          }
+        : {},
+    orderBy: [{ date: "desc" }, { time: "desc" }],
+    select: {
+      title: true,
+      date: true,
+      time: true,
+      type: true,
+      status: true,
+      ministry: { select: { name: true } },
+      attendances: { select: { present: true } },
+    },
+  });
+  type Row = (typeof events)[number];
+
+  const present = (event: Row) => event.attendances.filter((a) => a.present).length;
+  const registered = (event: Row) => event.attendances.length;
+  const totalPresent = events.reduce((sum, event) => sum + present(event), 0);
+  const totalRegistered = events.reduce((sum, event) => sum + registered(event), 0);
+  const range = desde || hasta ? `del ${desde || "inicio"} al ${hasta || "hoy"}` : "todas las fechas";
+
+  const table: ExportTable<Row> = {
+    title: "Reporte de asistencia por evento",
+    subtitle: `${events.length} eventos (${range})`,
+    rows: events,
+    columns: [
+      { header: "Fecha", value: (e) => e.date, format: "date", width: 14 },
+      { header: "Hora", value: (e) => e.time, width: 8 },
+      { header: "Evento", value: (e) => e.title, width: 32 },
+      { header: "Tipo", value: (e) => (e.type === "RELIGIOSO" ? "Religioso" : "Administrativo"), width: 16 },
+      { header: "Ministerio", value: (e) => e.ministry?.name ?? "General", width: 22 },
+      { header: "Estado", value: (e) => (e.status === "CANCELADO" ? "Cancelado" : "Activo"), width: 12 },
+      { header: "Presentes", value: (e) => present(e) },
+      { header: "Ausentes", value: (e) => registered(e) - present(e) },
+      { header: "Registrados", value: (e) => registered(e) },
+      {
+        header: "% asistencia",
+        value: (e) => (registered(e) ? `${Math.round((present(e) / registered(e)) * 100)}%` : "—"),
+      },
+    ],
+    footer: [
+      "Total",
+      null,
+      null,
+      null,
+      null,
+      null,
+      totalPresent,
+      totalRegistered - totalPresent,
+      totalRegistered,
+      totalRegistered ? `${Math.round((totalPresent / totalRegistered) * 100)}%` : "—",
+    ],
+  };
+  return table;
+}
+
 export const REPORTS: Record<string, ReportDefinition> = {
   miembros: {
     title: "Reporte general de miembros",
@@ -99,7 +168,13 @@ export const REPORTS: Record<string, ReportDefinition> = {
     period: true,
     build: incomeReport,
   },
+  asistencia: {
+    title: "Reporte de asistencia por evento",
+    description: "Presentes, ausentes y porcentaje de asistencia de cada evento.",
+    permission: "reports:general",
+    period: true,
+    build: attendanceReport,
+  },
   // Pendientes (cada dueño agrega el suyo con el mismo patrón):
-  // asistencia:   B · asistencia por evento          · "reports:general"
   // ministerios:  D · participación por ministerio   · "reports:general"
 };
