@@ -106,7 +106,16 @@ export default async function EventosPage({ searchParams }: { searchParams: Prom
               getKey={event => event.id}
               empty="Todavía no hay eventos registrados."
               columns={[
-                { header: "Fecha", cell: event => `${DATE_FORMAT.format(event.date)} · ${event.time}` },
+                {
+                  header: "Fecha",
+                  className: "whitespace-nowrap",
+                  cell: event => (
+                    <>
+                      <p>{DATE_FORMAT.format(event.date)}</p>
+                      <p className="text-xs text-muted">{event.time}</p>
+                    </>
+                  ),
+                },
                 {
                   header: "Evento",
                   cell: event => (
@@ -116,7 +125,18 @@ export default async function EventosPage({ searchParams }: { searchParams: Prom
                     </div>
                   ),
                 },
-                { header: "Tipo", cell: event => TYPE_LABELS[event.type] },
+                {
+                  header: "Tipo",
+                  cell: event => (
+                    <span
+                      className={`inline-block rounded-full border px-2.5 py-0.5 text-xs ${
+                        event.type === "RELIGIOSO" ? "border-brand/60 text-brand" : "border-border text-muted"
+                      }`}
+                    >
+                      {TYPE_LABELS[event.type]}
+                    </span>
+                  ),
+                },
                 { header: "Ministerio", cell: event => event.ministry?.name ?? <span className="text-muted">—</span> },
                 { header: "Responsable", cell: event => event.responsible?.name ?? <span className="text-muted">—</span> },
                 {
