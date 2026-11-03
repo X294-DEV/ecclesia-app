@@ -12,7 +12,7 @@ import { requireUser } from "@/server/session";
 // Layout de toda la zona autenticada: exige sesión y arma el menú según el rol.
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const user = await requireUser();
-  const church = await db.church.findUnique({ where: { id: 1 }, select: { name: true } });
+  const church = await db.church.findUnique({ where: { id: 1 }, select: { name: true, logoUrl: true } });
 
   const items = NAV_ITEMS.filter(
     (item) => !item.anyOf || item.anyOf.some((action) => can(user.role, action)),
@@ -22,9 +22,20 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen md:grid md:grid-cols-[240px_1fr]">
       <aside className="relative overflow-hidden border-b border-brand/40 bg-surface p-4 md:border-b-0 md:border-r">
         <RoseWindow className="pointer-events-none absolute -bottom-16 -left-16 hidden h-72 w-72 opacity-[0.07] md:block" />
-        <div className="relative mb-4">
-          <p className="font-display text-lg font-semibold uppercase tracking-[0.25em] text-brand">Ecclesia</p>
-          {church?.name && <p className="text-xs text-muted">{church.name}</p>}
+        <div className="relative mb-4 flex items-center gap-3">
+          {church?.logoUrl && (
+            // Data URL guardada en la BD: next/image no aporta nada aquí.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={church.logoUrl}
+              alt={`Logo de ${church.name}`}
+              className="h-10 w-10 shrink-0 rounded-md border border-brand/40 bg-background object-contain p-0.5"
+            />
+          )}
+          <div className="min-w-0">
+            <p className="font-display text-lg font-semibold uppercase tracking-[0.25em] text-brand">Ecclesia</p>
+            {church?.name && <p className="truncate text-xs text-muted">{church.name}</p>}
+          </div>
         </div>
         <div className="relative">
           <NavLinks items={items} />
