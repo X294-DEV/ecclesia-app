@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ActionForm } from "@/components/ui/action-form";
+import { Seal } from "@/components/ui/gothic";
 import { PageHeader } from "@/components/ui/page-header";
-import { buttonGhostClass, cardClass, cardFeaturedClass } from "@/components/ui/styles";
+import { buttonGhostClass, cardClass } from "@/components/ui/styles";
 import { db } from "@/lib/db";
 import { can } from "@/lib/permissions";
 import { deleteAnnouncementAction, saveAnnouncementAction } from "@/server/announcements";
@@ -12,7 +13,7 @@ export const metadata = { title: "Anuncios" };
 type Query = { editar?: string | string[] };
 
 const DATE_FORMAT = new Intl.DateTimeFormat("es-MX", { dateStyle: "long", timeZone: "UTC" });
-const SHORT_DATE_FORMAT = new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeZone: "UTC" });
+const MONTH_FORMAT = new Intl.DateTimeFormat("es-MX", { month: "short", timeZone: "UTC" });
 
 // RF-07: avisos de la iglesia (los importantes destacados) y los próximos eventos.
 export default async function AnunciosPage({ searchParams }: { searchParams: Promise<Query> }) {
@@ -51,24 +52,41 @@ export default async function AnunciosPage({ searchParams }: { searchParams: Pro
             <p className={`${cardClass} text-center text-muted`}>Todavía no hay anuncios publicados.</p>
           )}
           {announcements.map(announcement => (
-            <article key={announcement.id} className={announcement.important ? cardFeaturedClass : cardClass}>
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <h2 className="text-lg font-medium">{announcement.title}</h2>
+            <article
+              key={announcement.id}
+              className={
+                announcement.important
+                  ? "relative overflow-hidden rounded-sm border border-brand shadow-[0_14px_30px_-14px_rgb(0_0_0/0.8)]"
+                  : "gothic-card overflow-hidden rounded-lg bg-surface"
+              }
+            >
+              {/* Los importantes se leen sobre pergamino y llevan un sello de cera. */}
+              <div className={announcement.important ? "bg-parchment p-5 pr-20 text-ink" : "p-5"}>
+                {announcement.important && <Seal className="absolute right-3 top-3 h-14 w-14 text-ink" />}
                 <div className="flex flex-wrap items-center gap-2 text-xs">
                   {announcement.important && (
-                    <span className="rounded border border-brand px-2 py-0.5 font-semibold text-brand">Importante</span>
+                    <span className="rounded-full border border-ink/60 px-2.5 py-0.5 font-semibold uppercase tracking-wide">
+                      Importante
+                    </span>
                   )}
                   {announcement.publishedAt >= tomorrow && (
-                    <span className="rounded border border-border px-2 py-0.5 text-muted">Programado</span>
+                    <span
+                      className={`rounded-full border px-2.5 py-0.5 ${
+                        announcement.important ? "border-ink/40 text-ink/75" : "border-border text-muted"
+                      }`}
+                    >
+                      Programado
+                    </span>
                   )}
                 </div>
+                <h2 className="mt-1 font-display text-xl font-bold leading-snug">{announcement.title}</h2>
+                <p className={`mt-1 text-xs ${announcement.important ? "text-ink/75" : "text-muted"}`}>
+                  {DATE_FORMAT.format(announcement.publishedAt)} · {announcement.author.name}
+                </p>
+                <p className="mt-3 whitespace-pre-line text-sm">{announcement.content}</p>
               </div>
-              <p className="mt-1 text-xs text-muted">
-                {DATE_FORMAT.format(announcement.publishedAt)} · {announcement.author.name}
-              </p>
-              <p className="mt-3 whitespace-pre-line text-sm">{announcement.content}</p>
               {writable && (
-                <div className="mt-4 flex flex-wrap items-start gap-2">
+                <div className="flex flex-wrap items-center gap-2 border-t border-brand/40 bg-surface px-5 py-3">
                   <Link className={buttonGhostClass} href={`/anuncios?editar=${announcement.id}`}>Editar</Link>
                   <ActionForm
                     action={deleteAnnouncementAction}
@@ -110,17 +128,21 @@ export default async function AnunciosPage({ searchParams }: { searchParams: Pro
           )}
 
           <section className={`${cardClass} h-fit`}>
-            <h2 className="mb-4 font-medium">Próximos eventos</h2>
+            <h2 className="mb-4 font-display text-lg font-bold text-brand">Próximos eventos</h2>
             {events.length === 0 ? (
               <p className="text-sm text-muted">No hay eventos próximos.</p>
             ) : (
               <ul className="space-y-3">
                 {events.map(event => (
-                  <li key={event.id} className="border-l-2 border-brand pl-3 text-sm">
-                    <p className="font-medium">{event.title}</p>
-                    <p className="text-xs text-muted">
-                      {SHORT_DATE_FORMAT.format(event.date)} · {event.time} · {event.location}
-                    </p>
+                  <li key={event.id} className="flex items-center gap-3">
+                    <div className="w-12 shrink-0 rounded-sm bg-parchment py-1 text-center text-ink">
+                      <p className="font-display text-xl font-bold leading-none">{event.date.getUTCDate()}</p>
+                      <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide">{MONTH_FORMAT.format(event.date).replace(".", "")}</p>
+                    </div>
+                    <div className="min-w-0 text-sm">
+                      <p className="truncate font-medium">{event.title}</p>
+                      <p className="truncate text-xs text-muted">{event.time} · {event.location}</p>
+                    </div>
                   </li>
                 ))}
               </ul>

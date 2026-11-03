@@ -86,6 +86,21 @@ export function GothicDivider({ className = "" }: { className?: string }) {
   );
 }
 
+/** Sello de cera con rosetón, para marcar lo importante. Toma `text-*` como color del lacre. */
+export function Seal({ className = "" }: { className?: string }) {
+  return (
+    <svg aria-hidden="true" viewBox="-50 -50 100 100" className={`drop-shadow-[0_3px_4px_rgb(0_0_0/0.45)] ${className}`}>
+      <path
+        fill="currentColor"
+        d="M0 -47c9 0 12 6 20 8 8 2 14 4 17 12 3 8 -2 12 -1 20 1 8 6 13 2 21 -4 8 -11 8 -18 11 -7 3 -10 11 -20 11s-13 -8 -20 -11c-7 -3 -14 -3 -18 -11 -4 -8 1 -13 2 -21 1 -8 -4 -12 -1 -20 3 -8 9 -10 17 -12 8 -2 11 -8 20 -8Z"
+      />
+      <g fill="none" stroke="var(--parchment)" strokeWidth="1.6" opacity="0.85" transform="scale(0.78)">
+        <RoseWindowPaths />
+      </g>
+    </svg>
+  );
+}
+
 /** Esquinas de tracería (arco con cuadrifolio) para las tarjetas de datos. Va dentro de un contenedor `relative`. */
 export function TraceryCorners({ className = "" }: { className?: string }) {
   const corner = (
