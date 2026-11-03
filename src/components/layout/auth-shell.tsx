@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import { Arch, RoseWindow } from "@/components/ui/gothic";
-import { cardFeaturedClass } from "@/components/ui/styles";
+import { NaveScene } from "@/components/layout/nave-scene";
+import { Arch, OgivePanel } from "@/components/ui/gothic";
 
-/** Contenedor centrado para las pantallas públicas (login, recuperar, restablecer). */
+/** Contenedor para las pantallas públicas (login, recuperar, restablecer): nave de catedral y panel ojival. */
 export function AuthShell({
   title,
   subtitle,
@@ -13,16 +13,20 @@ export function AuthShell({
   children: ReactNode;
 }) {
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden p-6">
-      <RoseWindow className="pointer-events-none absolute left-1/2 top-1/2 h-[140vmin] w-[140vmin] -translate-x-1/2 -translate-y-1/2 opacity-[0.08]" />
-      <div className={`${cardFeaturedClass} relative w-full max-w-sm space-y-5`}>
-        <div className="text-center">
-          <Arch className="mx-auto mb-1" />
-          <p className="font-display text-sm font-semibold uppercase tracking-[0.3em] text-brand">Ecclesia</p>
-          <h1 className="mt-2 text-xl font-semibold">{title}</h1>
-          {subtitle && <p className="mt-1 text-sm text-muted">{subtitle}</p>}
-        </div>
-        {children}
+    <main className="relative min-h-screen overflow-hidden">
+      <NaveScene />
+      <div className="relative z-10 flex min-h-screen items-center justify-center p-6 lg:justify-end lg:pr-[8vw]">
+        <OgivePanel className="w-full max-w-md">
+          <div className="space-y-5">
+            <div className="text-center">
+              <Arch className="mx-auto mb-1" />
+              <p className="font-display text-sm font-semibold uppercase tracking-[0.3em] text-brand">Ecclesia</p>
+              <h1 className="mt-2 text-2xl font-semibold">{title}</h1>
+              {subtitle && <p className="mt-1 text-sm text-muted">{subtitle}</p>}
+            </div>
+            {children}
+          </div>
+        </OgivePanel>
       </div>
     </main>
   );

@@ -39,10 +39,23 @@
 body {
   background:
     radial-gradient(ellipse 80% 40% at 50% -10%, rgb(122 31 43 / 0.22), transparent 70%),
+    radial-gradient(ellipse 120% 90% at 50% 50%, transparent 55%, rgb(0 0 0 / 0.45) 100%),
     var(--background);
   background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Grano de piedra: ruido fino fijo sobre toda la pantalla; no atrapa clics ni se anima. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Títulos y menú en Cinzel; tablas y formularios conservan la fuente de lectura. */
@@ -68,9 +81,11 @@ h3,
 /* Doble borde dorado fino (tarjetas): línea exterior + línea interior hundida. */
 .gothic-card {
   border: 1px solid var(--brand);
+  background-image: linear-gradient(180deg, rgb(255 255 255 / 0.04), transparent 45%);
   box-shadow:
     inset 0 0 0 3px var(--surface),
-    inset 0 0 0 4px rgb(201 162 74 / 0.4);
+    inset 0 0 0 4px rgb(201 162 74 / 0.4),
+    0 12px 28px -12px rgb(0 0 0 / 0.65);
 }
 
 /* Esquinas ornamentadas para tarjetas importantes (clase opcional). */
@@ -111,7 +126,103 @@ h3,
   box-shadow: 0 0 14px var(--gold-glow);
 }
 
+/* Entrada: el contenido de cada página sube y aparece en cascada. */
+/* Los hijos de una cuadrícula pueden encogerse: así una tabla ancha hace scroll dentro de su caja
+   en lugar de empujar el formulario fuera de la pantalla. */
+main .grid > * {
+  min-width: 0;
+}
+
+/* Solo se define el estado inicial: la animación termina en los estilos propios de cada elemento. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+main > * {
+  animation: rise 0.5s ease-out backwards;
+}
+main > *:nth-child(2) {
+  animation-delay: 0.06s;
+}
+main > *:nth-child(3) {
+  animation-delay: 0.12s;
+}
+main > *:nth-child(4) {
+  animation-delay: 0.18s;
+}
+
+/* Rosetón que gira muy despacio (un giro cada 4 minutos). */
+@keyframes rose-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.rose-spin {
+  animation: rose-spin 240s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+/* Rayos de luz y motas de polvo de la pantalla de acceso. */
+@keyframes ray-drift {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateX(-2%);
+  }
+  50% {
+    opacity: 0.75;
+    transform: translateX(2%);
+  }
+}
+.light-ray {
+  animation: ray-drift 9s ease-in-out infinite;
+}
+@keyframes mote {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  20% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(28px, -150px);
+  }
+}
+.mote {
+  animation: mote 11s ease-in infinite;
+}
+
+/* Los arcos se "dibujan" al cargar (los trazos llevan pathLength="1"). */
+@keyframes arch-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.arch-draw path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: arch-draw 1.8s ease-out 0.2s forwards;
+}
+
+/* Inclinación 3D suave al pasar el mouse (tarjetas de evento). */
+.gothic-tilt {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.gothic-tilt:hover {
+  transform: perspective(900px) translateY(-4px) rotateX(2deg) rotateY(-2deg);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .gothic-tilt:hover {
+    transform: none;
+  }
   *,
   *::before,
   *::after {
