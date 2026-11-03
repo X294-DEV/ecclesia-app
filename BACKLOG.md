@@ -27,7 +27,7 @@ Reparto entre 4 personas: **A**, **B**, **C**, **D**. Cada quien toma módulos c
 
 ## Fase 2 — Cierre (sáb 31 – lun 2 nov)
 
-- [ ] **C** RF-08 Dashboard con gráficas (finanzas solo para roles autorizados) — `inicio`
+- [x] **C** RF-08 Dashboard con gráficas (finanzas solo para roles autorizados) — `inicio`
 - [x] **A** Helper de exportación Excel/PDF (`src/lib/export.ts`) + registro de reportes (`src/server/reports.ts`) + página `reportes`
 - [x] **A** RF-09 Reporte general de miembros
 - [ ] **B** RF-09 Reporte de asistencia por evento (agregarlo a `REPORTS`)
