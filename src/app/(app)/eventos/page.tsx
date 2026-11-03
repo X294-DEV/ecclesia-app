@@ -41,11 +41,13 @@ export default async function EventosPage({ searchParams }: { searchParams: Prom
 
   const scope = await eventScope(user);
   const monthRange = { gte: new Date(Date.UTC(year, month, 1)), lt: new Date(Date.UTC(year, month + 1, 1)) };
-  const events = await db.event.findMany({
+  const found = await db.event.findMany({
     where: { ...scope, ...(vista === "calendario" ? { date: monthRange } : {}) },
-    orderBy: [{ date: "asc" }, { time: "asc" }],
     include: { responsible: { select: { name: true } }, ministry: { select: { name: true } } },
   });
+  // Por día (UTC) y luego por hora: el seed guarda la fecha a medianoche local, los formularios a medianoche UTC.
+  const sortKey = (event: (typeof found)[number]) => `${event.date.toISOString().slice(0, 10)} ${event.time}`;
+  const events = found.sort((a, b) => sortKey(a).localeCompare(sortKey(b)));
 
   const [members, ministries, editing] = writable
     ? await Promise.all([
