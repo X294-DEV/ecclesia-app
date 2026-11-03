@@ -1,7 +1,8 @@
+import Link from "next/link";
 import { MonthlyBarChart } from "@/components/ui/charts";
-import { GothicDivider } from "@/components/ui/gothic";
+import { GothicDivider, OgivePanel, RoseWindow, TraceryCorners } from "@/components/ui/gothic";
 import { PageHeader } from "@/components/ui/page-header";
-import { cardClass, cardFeaturedClass } from "@/components/ui/styles";
+import { cardClass } from "@/components/ui/styles";
 import { formatMoney } from "@/lib/money";
 import { can } from "@/lib/permissions";
 import { ROLE_LABELS } from "@/lib/roles";
@@ -12,9 +13,10 @@ export const metadata = { title: "Inicio" };
 
 function StatCard({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
   return (
-    <div className={cardClass}>
-      <p className="text-sm text-muted">{label}</p>
-      <p className="mt-1 font-display text-3xl text-brand">{value}</p>
+    <div className={`${cardClass} relative pt-10 text-center`}>
+      <TraceryCorners />
+      <p className="font-display text-4xl text-brand">{value}</p>
+      <p className="mt-1 text-sm text-muted">{label}</p>
       {hint && <p className="mt-1 text-xs text-muted">{hint}</p>}
     </div>
   );
@@ -48,35 +50,43 @@ export default async function InicioPage() {
             <StatCard label="Ministerios" value={general.ministries} />
           </div>
 
-          <div className="grid gap-6 xl:grid-cols-2">
-            <section className={`${cardFeaturedClass} min-w-0`}>
-              <h2 className="mb-4 font-display text-lg text-brand">Próximos eventos</h2>
-              {general.upcomingEvents.length === 0 ? (
-                <p className="text-sm text-muted">No hay eventos próximos.</p>
-              ) : (
-                <ul className="divide-y divide-border">
-                  {general.upcomingEvents.map((event) => (
-                    <li key={event.id} className="flex items-start justify-between gap-3 py-2 text-sm">
-                      <div className="min-w-0">
-                        <p className="font-medium">{event.title}</p>
-                        <p className="truncate text-xs text-muted">{event.location}</p>
-                      </div>
-                      <p className="shrink-0 text-right text-muted">
-                        <span className="inline-block first-letter:uppercase">{dateFormat.format(event.date)}</span>
-                        <br />
+          <section className="min-w-0">
+            <div className="mb-3 flex items-end justify-between gap-3">
+              <h2 className="font-display text-xl text-brand">Próximos eventos</h2>
+              {can(user.role, "events:read") && (
+                <Link href="/eventos?vista=calendario" className="text-sm text-brand underline underline-offset-4">
+                  Ver calendario →
+                </Link>
+              )}
+            </div>
+            {general.upcomingEvents.length === 0 ? (
+              <p className={`${cardClass} text-center text-sm text-muted`}>No hay eventos próximos.</p>
+            ) : (
+              <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                {general.upcomingEvents.slice(0, 3).map((event) => (
+                  <li key={event.id} className="gothic-tilt min-w-0">
+                    <OgivePanel
+                      draw={false}
+                      bodyClassName="px-4 pb-4 pt-2 text-center"
+                      emblem={<RoseWindow spin className="h-9 w-9 opacity-80" />}
+                    >
+                      <h3 className="font-display text-lg leading-snug">{event.title}</h3>
+                      <p className="mt-1 text-sm text-brand">
+                        <span className="inline-block first-letter:uppercase">{dateFormat.format(event.date)}</span> ·{" "}
                         {event.time}
                       </p>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
+                      <p className="mt-0.5 truncate text-xs text-muted">{event.location}</p>
+                    </OgivePanel>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
 
-            <section className={`${cardClass} min-w-0`}>
-              <h2 className="mb-4 font-display text-lg text-brand">Asistencia por mes</h2>
-              <MonthlyBarChart data={general.attendanceByMonth} label="Asistencias" />
-            </section>
-          </div>
+          <section className={`${cardClass} min-w-0`}>
+            <h2 className="mb-4 font-display text-lg text-brand">Asistencia por mes</h2>
+            <MonthlyBarChart data={general.attendanceByMonth} label="Asistencias" />
+          </section>
         </section>
       )}
 
