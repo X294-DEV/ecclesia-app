@@ -183,21 +183,7 @@ main > *:nth-child(4) {
   transform-origin: 40% 30%;
 }
 
-/* Rayos de luz y motas de polvo de la pantalla de acceso. */
-@keyframes ray-drift {
-  0%,
-  100% {
-    opacity: 0.35;
-    transform: translateX(-2%);
-  }
-  50% {
-    opacity: 0.75;
-    transform: translateX(2%);
-  }
-}
-.light-ray {
-  animation: ray-drift 9s ease-in-out infinite;
-}
+/* Motas de polvo de la pantalla de acceso. */
 @keyframes mote {
   0% {
     opacity: 0;
@@ -245,6 +231,10 @@ main > *:nth-child(4) {
 @media (prefers-reduced-motion: reduce) {
   .gothic-tilt:hover {
     transform: none;
+  }
+  /* Sin movimiento, las motas quedarían como puntos quietos. */
+  .mote {
+    display: none;
   }
   *,
   *::before,
