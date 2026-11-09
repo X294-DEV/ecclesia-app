@@ -1,47 +1,58 @@
-import Image from "next/image";
-
 // Fondo de las pantallas de acceso: la nave de una catedral (grabado en public/diseno/nave.webp)
 // con un acercamiento muy lento, rayos de luz y motas de polvo (solo CSS).
+//
+// La imagen ocupa todo el ancho: se repite en espejo (espejo · normal · espejo · ...) de modo que
+// en cada unión las columnas coinciden y la arquitectura continúa sin corte. El rosetón queda en
+// --rose-x (a la izquierda en escritorio, centrado en móvil) y el panel de acceso va encima.
+
+import { preload } from "react-dom";
+
+const TILE_W = 85.69; // ancho de cada tira en vh: la imagen mide 850x992, así que a 100vh de alto no se recorta
+const ROSE_AT = 0.573; // posición del rosetón dentro de la imagen (487 de 850 px)
+// Tiras alternadas: las de índice par van en espejo y las impares normales. El rosetón está en la
+// tira normal BASE; hay tiras de sobra a ambos lados para cubrir también ventanas muy anchas.
+const TILES = Array.from({ length: 9 }, (_, index) => index % 2 === 0);
+const BASE = 3;
+const ROW_LEFT = `calc(var(--rose-x) - ${(TILE_W * (BASE + ROSE_AT)).toFixed(1)}vh)`;
 
 const RAYS = [
-  { left: "14%", delay: "0s", width: "4.5rem" },
-  { left: "30%", delay: "3s", width: "3rem" },
+  { left: "8%", delay: "0s", width: "4.5rem" },
+  { left: "18%", delay: "3s", width: "3rem" },
 ];
 
 // Posiciones fijas (no aleatorias) para que servidor y cliente pinten lo mismo.
 const MOTES = [
-  { left: "10%", top: "72%", delay: "0s", dur: "11s" },
-  { left: "20%", top: "58%", delay: "2s", dur: "13s" },
-  { left: "28%", top: "80%", delay: "4s", dur: "10s" },
-  { left: "36%", top: "64%", delay: "1s", dur: "12s" },
-  { left: "44%", top: "76%", delay: "6s", dur: "14s" },
-  { left: "52%", top: "55%", delay: "3s", dur: "11s" },
-  { left: "16%", top: "40%", delay: "5s", dur: "12s" },
-  { left: "40%", top: "34%", delay: "8s", dur: "15s" },
+  { left: "6%", top: "72%", delay: "0s", dur: "11s" },
+  { left: "12%", top: "58%", delay: "2s", dur: "13s" },
+  { left: "17%", top: "80%", delay: "4s", dur: "10s" },
+  { left: "22%", top: "64%", delay: "1s", dur: "12s" },
+  { left: "26%", top: "76%", delay: "6s", dur: "14s" },
+  { left: "31%", top: "55%", delay: "3s", dur: "11s" },
+  { left: "10%", top: "40%", delay: "5s", dur: "12s" },
+  { left: "24%", top: "34%", delay: "8s", dur: "15s" },
 ];
 
 export function NaveScene() {
+  // El fondo no es una <img>, así que se pide por adelantado para que no aparezca tarde.
+  preload("/diseno/nave.webp", { as: "image" });
+
+  // `fixed`: el fondo mide siempre exactamente la ventana (100vh). Si fuera `absolute` y la página
+  // creciera más que la ventana, las tiras se recortarían por los lados y volvería el corte.
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 overflow-hidden opacity-35 lg:right-[34rem] lg:opacity-100"
+      className="pointer-events-none fixed inset-0 overflow-hidden opacity-35 [--rose-x:50vw] lg:opacity-100 lg:[--rose-x:30vw]"
     >
-      {/* La imagen se desvanece hacia el panel de la derecha. */}
-      <div
-        className="nave-drift absolute inset-0"
-        style={{
-          maskImage: "linear-gradient(to right, black 60%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to right, black 60%, transparent 100%)",
-        }}
-      >
-        <Image
-          src="/diseno/nave.webp"
-          alt=""
-          fill
-          priority
-          sizes="(min-width: 1024px) 60vw, 100vw"
-          className="object-cover object-center"
-        />
+      <div className="nave-drift absolute inset-0">
+        <div className="absolute inset-y-0 flex" style={{ left: ROW_LEFT }}>
+          {TILES.map((mirror, index) => (
+            <div
+              key={index}
+              className={`h-full shrink-0 bg-cover bg-center ${mirror ? "-scale-x-100" : ""}`}
+              style={{ width: `${TILE_W}vh`, backgroundImage: "url(/diseno/nave.webp)" }}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Rayos de luz sobre la imagen */}

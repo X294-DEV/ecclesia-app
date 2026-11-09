@@ -20,8 +20,12 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen md:grid md:grid-cols-[240px_1fr]">
-      <aside className="relative overflow-hidden border-b border-brand/40 bg-surface p-4 md:border-b-0 md:border-r">
-        <RoseWindow spin className="pointer-events-none absolute -bottom-16 -left-16 hidden h-72 w-72 opacity-[0.09] md:block" />
+      {/* En escritorio el menú queda fijo (ocupa toda la altura de la ventana) aunque la página haga scroll. */}
+      <aside className="relative overflow-hidden border-b border-brand/40 bg-surface p-4 md:sticky md:top-0 md:h-screen md:self-start md:overflow-y-auto md:border-b-0 md:border-r">
+        {/* El rosetón va en su propio contenedor recortado para no crear scroll dentro del menú. */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block">
+          <RoseWindow spin className="absolute -bottom-16 -left-16 h-72 w-72 opacity-[0.09]" />
+        </div>
         <div className="relative mb-4 flex items-center gap-3">
           {church?.logoUrl && (
             // Data URL guardada en la BD: next/image no aporta nada aquí.
